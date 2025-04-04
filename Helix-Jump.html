@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lubanlock - A challenging puzzle game that tests your spatial awareness and strategic thinking. Play this addictive block-matching game online for free!">
+    <meta name="keywords" content="puzzle game, online puzzle, brain teaser, block matching, strategic game, lubanlock">
+    <link rel="canonical" href="https://lubanlock.com/puzzle-game" />
+    <title>Lubanlock - Engaging Online Puzzle Game | Challenge Your Mind</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(41, 128, 185, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Common styles */
+        .container {
+            max-width: 1600px;
+            margin: 1.5rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title i {
+            color: #FFD700;
+        }
+
+        /* Header styles */
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+            background: rgba(15, 32, 39, 0.95);
+            backdrop-filter: blur(10px);
+            height: 45px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-logo h1 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .search-container {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.35rem 1rem 0.35rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            backdrop-filter: blur(5px);
+            font-size: 0.9rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Auth styles */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .auth-btn {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            background: rgba(74, 144, 226, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .signup-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .favorites-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        /* Game container styles */
+        .game-container {
+            display: grid;
+            grid-template-columns: 3.5fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .game-frame-container {
+            position: relative;
+            width: 95%;
+            padding-bottom: 58%;
+            height: 0;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-left: 2.5%;
+        }
+
+        .game-frame {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        /* Game controls */
+        .game-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(15, 32, 39, 0.95);
+            border-radius: 0 0 12px 12px;
+            width: 95%;
+            margin-left: 2.5%;
+        }
+
+        .control-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            color: #fff;
+            transition: all 0.2s ease;
+            min-width: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Sidebar styles */
+        .game-sidebar {
+            padding: 1.5rem;
+            color: #fff;
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Game info styles */
+        .game-info-container {
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .game-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .game-meta-item i {
+            color: #FFD700;
+        }
+
+        .game-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .game-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        /* Feature cards */
+        .feature-cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card h2 {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-card ul li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Comments section */
+        .comments-section {
+            padding: 2rem;
+        }
+
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comments-container {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 2rem;
+        }
+
+        .comment-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comment-input {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #fff;
+            resize: vertical;
+        }
+
+        .comment-submit {
+            align-self: flex-end;
+            padding: 0.75rem 2rem;
+            background: rgba(74, 144, 226, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+    
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            color: #fff;
+            position: relative;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .game-container {
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+
+            .game-frame-container {
+                padding-bottom: 100%;
+            }
+
+            .comments-container {
+            grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-indicator" style="position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: #4a90e2; z-index: 9999;"></div>
+
+    <header class="game-header">
+        <div class="game-logo">
+            <h1>Lubanlock Puzzle Game</h1>
+        </div>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search games...">
+        </div>
+
+        <div class="auth-container">
+            <button class="auth-btn favorites-btn" title="My Favorites">
+                <i class="fas fa-heart"></i>
+            </button>
+            <button class="auth-btn login-btn">
+                <i class="fas fa-user mr-1"></i>
+                Log in
+            </button>
+            <button class="auth-btn signup-btn">
+                <i class="fas fa-user-plus mr-1"></i>
+                Sign up
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+    <div class="game-container">
+            <main class="game-main">
+                <div class="game-frame-container">
+                    <iframe 
+                        id="gameFrame"
+                        src="https://games.crazygames.com/en_US/helix-jump/index.html" 
+                        class="game-frame"
+                        frameborder="0"
+                        loading="lazy"
+                        allow="gamepad *; autoplay; fullscreen; clipboard-read; clipboard-write"
+                        sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin allow-downloads"
+                        title="Helix Jump">
+                    </iframe>
+                </div>
+
+                <div class="game-controls">
+                    <button class="control-btn">
+                        <i class="fas fa-redo"></i>
+                        <span>Replay</span>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-search-plus"></i>
+                        <span>Zoom In</span>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-search-minus"></i>
+                        <span>Zoom Out</span>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-expand"></i>
+                        <span>Fullscreen</span>
+                    </button>
+                    <button class="control-btn favorite-btn" title="Add to Favorites">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorite</span>
+                    </button>
+                </div>
+            </main>
+
+            <aside class="game-sidebar">
+                <div class="sidebar-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-book"></i>
+                        Controls Guide
+                    </h2>
+                        <div class="section-content">
+                            Mouse Controls: Click and drag to play
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bullseye"></i>
+                        Game Objective
+                    </h2>
+                    <div class="section-content">
+                        Master each level through strategic thinking and skillful gameplay. Complete objectives to progress.
+                    </div>
+                    </div>
+
+                <div class="sidebar-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-play-circle"></i>
+                        How to Start
+                    </h2>
+                    <div class="section-content">
+                        Begin playing immediately after the game loads. No additional setup required - start your adventure right away.
+                    </div>
+                </div>
+
+                <div class="sidebar-section recent-games">
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i>
+                        Recently Played
+                    </h2>
+                    <div class="sidebar-mini-games" id="recentGamesGrid"></div>
+                </div>
+
+                <div class="sidebar-section similar-games">
+                    <h2 class="section-title">
+                        <i class="fas fa-puzzle-piece"></i>
+                        Similar Games
+                    </h2>
+                    <div class="sidebar-mini-games" id="similarGamesGrid"></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <div class="game-info-container">
+        <h3 class="game-title">Helix Jump</h3>
+        <div class="game-meta">
+            <div class="game-meta-item">
+                <i class="fas fa-folder"></i>
+                Category: Arcade Games
+            </div>
+            <div class="game-meta-item">
+                <i class="fas fa-calendar"></i>
+                Date: 2024-03-04
+            </div>
+        </div>
+        <div class="game-tags">
+            <span class="game-tag">H5 Game</span>
+            <span class="game-tag">Arcade</span>
+            <span class="game-tag">Skill</span>
+        </div>
+    </div>
+
+    <div class="feature-cards-container">
+        <div class="feature-card">
+            <h2>How to Play</h2>
+            <ul>
+                <li>• Click and hold to rotate the helix</li>
+                <li>• Guide the ball through safe platforms</li>
+                <li>• Avoid red obstacles</li>
+            </ul>
+        </div>
+        <div class="feature-card">
+            <h2>Game Benefits</h2>
+            <ul>
+                <li>• Improves hand-eye coordination</li>
+                <li>• Enhances timing skills</li>
+                <li>• Develops concentration</li>
+            </ul>
+        </div>
+        <div class="feature-card">
+            <h2>Key Features</h2>
+            <ul>
+                <li>• Endless gameplay</li>
+                <li>• Increasing difficulty</li>
+                <li>• Score multipliers</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="comments-section">
+        <div class="comments-header">
+            <h2>Game Reviews</h2>
+            <div class="comments-stats">
+                2 Reviews | 2 Participants
+            </div>
+        </div>
+
+        <div class="comments-container">
+            <div class="comment-area">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Share your thoughts..."></textarea>
+                    <button class="comment-submit">Post Review</button>
+                </div>
+                <div class="comments-list">
+                    <!-- Example comment structure -->
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <div class="comment-user">
+                                <div class="user-avatar">
+                                    <img src="avatar1.jpg" alt="User Avatar">
+                                </div>
+                                <span class="user-name">John Doe</span>
+                                <span class="comment-date">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            This game is amazing! The puzzles are challenging and fun.
+                        </div>
+                        <div class="comment-actions">
+                            <button class="action-btn like-btn">
+                                <i class="fas fa-heart"></i>
+                                <span class="like-count">12</span>
+                            </button>
+                            <button class="action-btn reply-btn">
+                                <i class="fas fa-reply"></i>
+                                Reply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment-rules">
+                <h3>Review Guidelines:</h3>
+                <ol>
+                    <li>No illegal or inappropriate content</li>
+                    <li>Avoid personal attacks, discrimination, spam, or advertising</li>
+                    <li>All reviews represent personal opinions only</li>
+                    <li>Reviews are subject to moderation before display</li>
+                    <li>Report game issues through the review system</li>
+                    <li>Contact email: 940401318@qq.com</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-white py-8">
+        <p>&copy; 2024 Lubanlock.com - All rights reserved</p>
+        </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Log in</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <input type="email" class="form-input" placeholder="Enter your email" required>
+                <input type="password" class="form-input" placeholder="Enter your password" required>
+                <button type="submit" class="modal-submit">Log in</button>
+            </form>
+            <div class="modal-footer">
+                <span>Don't have an account?</span>
+                <a href="#" id="switchToSignup">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign up</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="signupForm">
+                <input type="email" class="form-input" placeholder="Enter your email" required>
+                <input type="password" class="form-input" placeholder="Create a password" required>
+                <input type="password" class="form-input" placeholder="Confirm your password" required>
+                <button type="submit" class="modal-submit">Sign up</button>
+            </form>
+            <div class="modal-footer">
+                <span>Already have an account?</span>
+                <a href="#" id="switchToSignin">Log in</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game configurations
+        const gameConfigs = {
+            'plant-rush': {
+                title: 'Plant Rush',
+                category: 'Strategy Games',
+                date: '2025-03-04',
+                tags: ['H5 Game', 'Level-based', 'Puzzle'],
+                loadingTip: 'Note: This game has a large file size and may take longer to load. Please be patient...',
+                controls: 'Mouse Controls: Click and drag to play',
+                objective: 'Master each level through strategic thinking and skillful gameplay. Complete objectives to progress.',
+                howToStart: 'Begin playing immediately after the game loads. No additional setup required - start your adventure right away.',
+                features: {
+                    howToPlay: [
+                        'Click and drag to move plants',
+                        'Match three or more similar plants',
+                        'Create combos for bonus points',
+                        'Complete level objectives to advance'
+                    ],
+                    benefits: [
+                        'Improves strategic thinking',
+                        'Enhances pattern recognition',
+                        'Develops quick decision making',
+                        'Provides relaxing gameplay experience'
+                    ],
+                    keyFeatures: [
+                        'Multiple unique levels',
+                        'Progressive difficulty',
+                        'Special power-ups and boosters',
+                        'Beautiful graphics and animations'
+                    ]
+                }
+            },
+            'helix-jump': {
+                title: 'Helix Jump',
+                category: 'Arcade Games',
+                date: '2025-03-04',
+                tags: ['H5 Game', 'Arcade', 'Skill'],
+                loadingTip: 'Get ready to test your timing and precision!',
+                controls: 'Mouse Controls: Click and hold to rotate the helix',
+                objective: 'Guide the ball through the helix tower, avoiding obstacles and reaching the bottom safely.',
+                howToStart: 'Click to start the game and begin your descent through the helix tower.',
+                features: {
+                    howToPlay: [
+                        'Click and hold to rotate the helix',
+                        'Guide the ball through safe platforms',
+                        'Avoid red obstacles',
+                        'Chain combos for higher scores'
+                    ],
+                    benefits: [
+                        'Improves hand-eye coordination',
+                        'Enhances timing skills',
+                        'Develops concentration',
+                        'Tests reflexes and precision'
+                    ],
+                    keyFeatures: [
+                        'Endless gameplay',
+                        'Increasing difficulty',
+                        'Score multipliers',
+                        'Colorful visual effects'
+                    ]
+                }
+            }
+        };
+
+        // Game loader class
+        class GameLoader {
+            constructor(frameId) {
+                this.frame = document.getElementById(frameId);
+                this.loadingIndicator = document.getElementById('loading-indicator');
+                this.retryCount = 0;
+                this.maxRetries = 3;
+                this.retryDelay = 2000;
+                this.autoOfflineMode = true;
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                if (!this.frame) return;
+                this.frame.addEventListener('load', () => this.handleGameLoad());
+                this.frame.addEventListener('error', (e) => this.handleError(e));
+                window.addEventListener('online', () => this.handleOnline());
+                window.addEventListener('offline', () => this.handleOffline());
+            }
+
+            handleGameLoad() {
+                this.frame.style.opacity = '1';
+                this.frame.classList.add('loaded');
+                if (this.loadingIndicator) {
+                    this.loadingIndicator.style.opacity = '0';
+                }
+                this.retryCount = 0;
+            }
+
+            handleError(error) {
+                console.error('Game loading error:', error);
+                if (this.autoOfflineMode) {
+                    this.enterOfflineMode();
+                } else if (this.retryCount < this.maxRetries) {
+                    this.retryCount++;
+                    setTimeout(() => this.retryLoad(), this.retryDelay);
+                }
+            }
+
+            handleOnline() {
+                if (!this.frame.classList.contains('loaded')) {
+                    this.retryLoad();
+                }
+            }
+
+            handleOffline() {
+                if (this.autoOfflineMode) {
+                    this.enterOfflineMode();
+                }
+            }
+
+            retryLoad() {
+                const currentSrc = this.frame.src;
+                this.frame.src = 'about:blank';
+                setTimeout(() => {
+                    this.frame.src = currentSrc;
+                }, 100);
+            }
+
+            enterOfflineMode() {
+                this.frame.style.display = 'none';
+                const offlineContainer = document.createElement('div');
+                offlineContainer.className = 'offline-game-container';
+                offlineContainer.innerHTML = `
+                    <canvas class="game-canvas"></canvas>
+                    <div class="offline-controls">
+                        <button onclick="gameLoader.retryOnlineMode()" class="offline-btn">
+                            <i class="fas fa-sync"></i>
+                            <span>Try Online Mode</span>
+                        </button>
+                    </div>
+                `;
+                this.frame.parentElement.appendChild(offlineContainer);
+                this.showNotification('Playing in offline mode', 'wifi-slash');
+                this.initOfflineGame(offlineContainer.querySelector('.game-canvas'));
+            }
+
+            showNotification(message, icon) {
+                const notification = document.createElement('div');
+                notification.className = 'game-notification';
+                notification.innerHTML = `
+                    <i class="fas fa-${icon}"></i>
+                    <span>${message}</span>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+
+            retryOnlineMode() {
+                const offlineContainer = document.querySelector('.offline-game-container');
+                if (offlineContainer) {
+                    offlineContainer.remove();
+                }
+                this.frame.style.display = '';
+                this.retryLoad();
+            }
+
+            initOfflineGame(canvas) {
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Offline Mode - Simple Game', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        // Initialize game loader
+        const gameLoader = new GameLoader('gameFrame');
+
+        // Game history management
+        const gameHistory = {
+            recentGames: JSON.parse(localStorage.getItem('recentGames') || '[]'),
+            maxRecentGames: 3,
+            similarGames: [
+                { id: 'game1', image: 'similar1.jpg', title: 'Puzzle Master' },
+                { id: 'game2', image: 'similar2.jpg', title: 'Block Quest' },
+                { id: 'game3', image: 'similar3.jpg', title: 'Color Match' }
+            ],
+
+            addRecentGame(game) {
+                this.recentGames = this.recentGames.filter(g => g.id !== game.id);
+                this.recentGames.unshift(game);
+                if (this.recentGames.length > this.maxRecentGames) {
+                    this.recentGames.pop();
+                }
+                localStorage.setItem('recentGames', JSON.stringify(this.recentGames));
+                this.updateDisplay();
+            },
+
+            getSimilarGames() {
+                let games = [...this.similarGames];
+                if (this.recentGames.length > 0) {
+                    games.sort(() => Math.random() - 0.5);
+                }
+                return games.slice(0, 3);
+            },
+
+            updateDisplay() {
+                const recentSection = document.querySelector('.recent-games');
+                const recentGrid = document.getElementById('recentGamesGrid');
+                const similarGrid = document.getElementById('similarGamesGrid');
+
+                if (this.recentGames.length > 0) {
+                    recentSection.style.display = 'block';
+                    recentGrid.innerHTML = this.recentGames.map(game => `
+                        <div class="mini-thumbnail">
+                            <img src="${game.image}" alt="${game.title}">
+                        </div>
+                    `).join('');
+                } else {
+                    recentSection.style.display = 'none';
+                }
+
+                const similarGames = this.getSimilarGames();
+                similarGrid.innerHTML = similarGames.map(game => `
+                    <div class="mini-thumbnail">
+                        <img src="${game.image}" alt="${game.title}">
+                    </div>
+                `).join('');
+            }
+        };
+
+        // Initialize game history display
+        gameHistory.updateDisplay();
+
+        // Auth handling
+        const initializeAuth = () => {
+            const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.querySelector('.signup-btn');
+            const loginModal = document.getElementById('loginModal');
+            const signupModal = document.getElementById('signupModal');
+            const closeButtons = document.querySelectorAll('.close-modal');
+            const switchToSignup = document.getElementById('switchToSignup');
+            const switchToSignin = document.getElementById('switchToSignin');
+
+        function showLoginModal() {
+            loginModal.style.display = 'flex';
+            loginModal.style.opacity = '1';
+            signupModal.style.display = 'none';
+        }
+
+        function showSignupModal() {
+            signupModal.style.display = 'flex';
+            signupModal.style.opacity = '1';
+            loginModal.style.display = 'none';
+        }
+
+        function hideModals() {
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'none';
+        }
+
+            loginBtn?.addEventListener('click', showLoginModal);
+            signupBtn?.addEventListener('click', showSignupModal);
+            closeButtons.forEach(button => button.addEventListener('click', hideModals));
+            
+            switchToSignup?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSignupModal();
+            });
+
+            switchToSignin?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showLoginModal();
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    hideModals();
+                }
+            });
+
+            loginModal?.querySelector('form')?.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                const email = e.target.querySelector('input[type="email"]').value;
+                    console.log('Login attempt with email:', email);
+                    hideModals();
+            });
+
+            signupModal?.querySelector('form')?.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                const email = e.target.querySelector('input[type="email"]').value;
+                    console.log('Signup attempt with email:', email);
+                    hideModals();
+            });
+        };
+
+        // Initialize auth when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeAuth);
+        } else {
+            initializeAuth();
+        }
+    </script>
+</body>
+</html>
